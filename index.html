@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wedding Invitation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #fdfbf7;
+      --cream-deep: #f4efe6;
+      --sky-tint: #e3eef6;
+      --paper: #ffffff;
+      --ink: #2c362f;
+      --muted: rgba(44, 54, 47, 0.72);
+      --sage: #5a7a62;
+      --sage-dark: #3d5244;
+      --buttercup: #e8c547;
+      --cornflower: #8fa7c9;
+      --clover: #c8b8d8;
+      --poppy: #d97b6a;
+      --daisy: #f5f0e6;
+      --gold: #b8923a;
+      --gold-soft: rgba(184, 146, 58, 0.25);
+      --font-display: "Cormorant Garamond", Georgia, serif;
+      --font-ui: "Outfit", system-ui, sans-serif;
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-ui);
+      font-weight: 300;
+      color: var(--ink);
+      background: linear-gradient(180deg, var(--sky-tint) 0%, var(--cream) 38%, var(--cream-deep) 100%);
+      overflow-x: hidden;
+    }
+
+    /* Soft meadow light */
+    .aurora {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 90% 55% at 15% 10%, rgba(232, 197, 71, 0.18), transparent 52%),
+        radial-gradient(ellipse 70% 50% at 85% 15%, rgba(143, 167, 201, 0.2), transparent 48%),
+        radial-gradient(ellipse 100% 70% at 50% 100%, rgba(90, 122, 98, 0.12), transparent 55%),
+        linear-gradient(180deg, rgba(253, 251, 247, 0.4), transparent 60%);
+      animation: aurora-shift 22s ease-in-out infinite alternate;
+    }
+
+    @keyframes aurora-shift {
+      0% { filter: hue-rotate(-6deg) brightness(1); transform: scale(1); }
+      100% { filter: hue-rotate(10deg) brightness(1.03); transform: scale(1.02); }
+    }
+
+    /* Field flowers illustration */
+    .meadow {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: min(200px, 28vh);
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.92;
+    }
+
+    .meadow svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Floating field petals & petals */
+    .petals {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .petal {
+      position: absolute;
+      width: 10px;
+      height: 14px;
+      border-radius: 50% 50% 50% 0;
+      opacity: 0.55;
+      animation: fall linear infinite;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25);
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-10vh) rotate(0deg) translateX(0);
+        opacity: 0;
+      }
+      10% { opacity: 0.5; }
+      90% { opacity: 0.35; }
+      100% {
+        transform: translateY(110vh) rotate(720deg) translateX(40px);
+        opacity: 0;
+      }
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 2;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: clamp(1.5rem, 4vw, 3rem);
+      padding-bottom: clamp(4rem, 18vh, 10rem);
+    }
+
+    header.hero {
+      text-align: center;
+      padding: clamp(3rem, 12vh, 7rem) 0 clamp(2rem, 6vh, 4rem);
+    }
+
+    .eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 1.25rem;
+      opacity: 0;
+      animation: fade-up 1.2s var(--ease-out) 0.2s forwards;
+    }
+
+    .names {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(2.8rem, 9vw, 4.5rem);
+      line-height: 1.05;
+      letter-spacing: 0.02em;
+      margin: 0 0 0.5rem;
+      background: linear-gradient(120deg, var(--sage-dark) 0%, var(--gold) 42%, var(--sage) 88%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: fade-up 1.2s var(--ease-out) 0.35s forwards, shimmer 8s ease-in-out infinite;
+      opacity: 0;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% center; }
+      50% { background-position: 100% center; }
+    }
+
+    .ampersand {
+      display: block;
+      font-style: italic;
+      font-size: 0.45em;
+      color: var(--poppy);
+      margin: 0.35rem 0;
+      opacity: 0;
+      animation: fade-up 1s var(--ease-out) 0.55s forwards;
+    }
+
+    .tagline {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: clamp(1.1rem, 3vw, 1.35rem);
+      color: var(--muted);
+      margin-top: 1.5rem;
+      opacity: 0;
+      animation: fade-up 1s var(--ease-out) 0.75s forwards;
+    }
+
+    @keyframes fade-up {
+      from {
+        opacity: 0;
+        transform: translateY(22px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .countdown {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+      margin: 2.5rem auto 0;
+      max-width: 380px;
+      opacity: 0;
+      animation: fade-up 1s var(--ease-out) 0.95s forwards;
+    }
+
+    .countdown .unit {
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid rgba(90, 122, 98, 0.2);
+      border-radius: 12px;
+      padding: 0.85rem 0.5rem;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 6px 20px rgba(60, 80, 65, 0.06);
+    }
+
+    .countdown .num {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 5vw, 2rem);
+      font-weight: 600;
+      color: var(--sage-dark);
+      display: block;
+      line-height: 1;
+    }
+
+    .countdown .lbl {
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.35rem;
+    }
+
+    section.card {
+      background: linear-gradient(165deg, rgba(255, 255, 255, 0.92), rgba(253, 251, 247, 0.88));
+      border: 1px solid rgba(90, 122, 98, 0.15);
+      border-radius: 20px;
+      padding: clamp(1.75rem, 4vw, 2.5rem);
+      margin-bottom: 1.25rem;
+      box-shadow: 0 18px 48px rgba(45, 70, 55, 0.08);
+    }
+
+    section.card h2 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1.35rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin: 0 0 1rem;
+    }
+
+    section.card p {
+      margin: 0 0 1rem;
+      line-height: 1.75;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    section.card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .detail-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem 2rem;
+      margin-top: 1.25rem;
+    }
+
+    .detail-row div strong {
+      display: block;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 0.35rem;
+    }
+
+    .detail-row div span {
+      color: var(--ink);
+      font-size: 0.95rem;
+    }
+
+    .schedule {
+      list-style: none;
+      margin: 0.25rem 0 0;
+      padding: 0;
+    }
+
+    .schedule li {
+      display: grid;
+      grid-template-columns: 5.25rem 1fr;
+      gap: 0.75rem 1.25rem;
+      align-items: baseline;
+      padding: 0.95rem 0;
+      border-bottom: 1px solid rgba(90, 122, 98, 0.12);
+    }
+
+    .schedule li:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .schedule li:first-child {
+      padding-top: 0.35rem;
+    }
+
+    .schedule time {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1.28rem;
+      color: var(--sage-dark);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.02em;
+    }
+
+    .schedule-what {
+      font-size: 1.02rem;
+      color: var(--ink);
+      font-weight: 400;
+    }
+
+    section.card.dress-code-section {
+      background: linear-gradient(165deg, rgba(255, 255, 255, 0.98), rgba(241, 248, 252, 0.94));
+      border-color: rgba(143, 167, 201, 0.28);
+      box-shadow: 0 16px 44px rgba(120, 150, 175, 0.07);
+    }
+
+    section.card.dress-code-section > h2 {
+      color: #7a9eb8;
+    }
+
+    section.card.dress-code-section > p {
+      color: rgba(55, 72, 78, 0.62);
+    }
+
+    .dress-code-visual {
+      margin: 1.35rem 0 0;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(160, 190, 210, 0.35);
+      box-shadow: 0 10px 28px rgba(130, 160, 185, 0.1);
+      background: linear-gradient(180deg, #ffffff, #f4f9fc);
+    }
+
+    .dress-code-visual img {
+      width: 100%;
+      height: auto;
+      display: block;
+      vertical-align: middle;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+
+    .btn {
+      font-family: var(--font-ui);
+      font-weight: 500;
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.95rem 1.6rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out), background 0.35s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(120deg, var(--sage), #6d9476);
+      color: var(--cream);
+      box-shadow: 0 8px 26px rgba(90, 122, 98, 0.28);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 34px rgba(90, 122, 98, 0.35);
+    }
+
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.5);
+      color: var(--sage-dark);
+      border: 1px solid rgba(90, 122, 98, 0.35);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--buttercup);
+      color: var(--sage-dark);
+      background: rgba(255, 255, 255, 0.85);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2.5rem 0 calc(3rem + min(80px, 12vh));
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(61, 82, 68, 0.45);
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-stagger > * {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+    }
+
+    .reveal-stagger.is-visible > *:nth-child(1) { transition-delay: 0.05s; }
+    .reveal-stagger.is-visible > *:nth-child(2) { transition-delay: 0.15s; }
+    .reveal-stagger.is-visible > *:nth-child(3) { transition-delay: 0.25s; }
+
+    .reveal-stagger.is-visible > * {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Cursor glow (desktop) */
+    .cursor-glow {
+      position: fixed;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1;
+      background: radial-gradient(circle, rgba(232, 197, 71, 0.14) 0%, rgba(143, 167, 201, 0.08) 40%, transparent 68%);
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: opacity 0.5s;
+      mix-blend-mode: multiply;
+    }
+
+    body:hover .cursor-glow {
+      opacity: 1;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .petals { display: none; }
+    }
+  </style>
+</head>
+<body data-wedding-date="2026-09-04T17:00:00">
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="petals" id="petals" aria-hidden="true"></div>
+  <div class="meadow" aria-hidden="true">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 200" preserveAspectRatio="xMidYMax meet" role="presentation">
+      <defs>
+        <linearGradient id="stem" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#6d9476" />
+          <stop offset="100%" stop-color="#4d6b52" />
+        </linearGradient>
+      </defs>
+      <path fill="url(#stem)" opacity="0.25" d="M0 95 Q200 70 400 88 T800 82 T1200 90 V200 H0Z" />
+      <path fill="#5a7a62" opacity="0.35" d="M0 118 Q320 88 640 108 T1200 102 V200 H0Z" />
+      <path fill="#7aab82" opacity="0.42" d="M0 138 Q280 112 560 128 T1200 118 V200 H0Z" />
+      <!-- stems -->
+      <g stroke="#4d6b52" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.55">
+        <path d="M120 200 Q118 140 125 95" />
+        <path d="M260 200 Q255 130 248 88" />
+        <path d="M420 200 Q418 125 430 72" />
+        <path d="M600 200 Q598 135 592 80" />
+        <path d="M780 200 Q782 128 770 76" />
+        <path d="M960 200 Q958 132 968 84" />
+        <path d="M1080 200 Q1078 138 1085 92" />
+      </g>
+      <!-- wildflower heads -->
+      <g>
+        <circle cx="125" cy="88" r="14" fill="#f7f2e4" stroke="#e8c547" stroke-width="2" />
+        <circle cx="125" cy="88" r="4" fill="#e8c547" />
+        <circle cx="248" cy="82" r="11" fill="#d97b6a" opacity="0.9" />
+        <circle cx="248" cy="82" r="3" fill="#5a3228" />
+        <circle cx="430" cy="68" r="13" fill="#a8bdd9" />
+        <circle cx="430" cy="68" r="4" fill="#eef3fa" />
+        <circle cx="592" cy="76" r="12" fill="#f2e8c9" stroke="#c9b27a" stroke-width="1.5" />
+        <circle cx="592" cy="76" r="3.5" fill="#e8c547" />
+        <circle cx="770" cy="72" r="10" fill="#d4c4e0" />
+        <circle cx="770" cy="72" r="3" fill="#fff" />
+        <circle cx="968" cy="80" r="15" fill="#fff" stroke="#dce8dd" stroke-width="1.5" />
+        <circle cx="968" cy="80" r="4" fill="#e8c547" />
+        <circle cx="1085" cy="88" r="9" fill="#8fa7c9" />
+        <circle cx="1085" cy="88" r="3" fill="#fff" />
+      </g>
+      <!-- tiny buds -->
+      <g fill="#8fbc8f" opacity="0.7">
+        <circle cx="190" cy="150" r="4" />
+        <circle cx="340" cy="160" r="3" />
+        <circle cx="520" cy="155" r="4" />
+        <circle cx="700" cy="158" r="3" />
+        <circle cx="880" cy="152" r="4" />
+      </g>
+    </svg>
+  </div>
+  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <header class="hero">
+      <p class="eyebrow">Together with their families</p>
+      <h1 class="names">
+        Emma Rose
+        <span class="ampersand">&amp;</span>
+        James Cole
+      </h1>
+      <p class="tagline">Invite you to celebrate their marriage</p>
+      <div class="countdown" id="countdown" aria-live="polite">
+        <div class="unit"><span class="num" id="cd-days">—</span><span class="lbl">Days</span></div>
+        <div class="unit"><span class="num" id="cd-hours">—</span><span class="lbl">Hours</span></div>
+        <div class="unit"><span class="num" id="cd-mins">—</span><span class="lbl">Mins</span></div>
+        <div class="unit"><span class="num" id="cd-secs">—</span><span class="lbl">Secs</span></div>
+      </div>
+    </header>
+
+    <section class="card reveal" id="when">
+      <h2>Ceremony &amp; reception</h2>
+      <p>
+        We would be honored to have you join us for an evening of dinner, dancing, and joy as we begin this new chapter.
+      </p>
+      <div class="detail-row reveal-stagger">
+        <div>
+          <strong>When</strong>
+          <span>Friday, September 4, 2026</span><br />
+          <span>Ceremony at 5:00 in the afternoon</span>
+        </div>
+        <div>
+          <strong>Where</strong>
+          <span>Villa Saakadze</span>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="btn btn-primary" id="rsvpBtn" href="#">RSVP</a>
+        <a class="btn btn-ghost" href="https://maps.app.goo.gl/Hc9iQ9e4MYyxzpcZ8" target="_blank" rel="noopener">Directions</a>
+      </div>
+    </section>
+
+    <section class="card reveal" id="schedule" aria-labelledby="schedule-heading">
+      <h2 id="schedule-heading">Schedule</h2>
+      <ul class="schedule">
+        <li>
+          <time datetime="2026-09-04T17:00">17:00</time>
+          <span class="schedule-what">Ceremony</span>
+        </li>
+        <li>
+          <time datetime="2026-09-04T18:30">18:30</time>
+          <span class="schedule-what">Celebration</span>
+        </li>
+        <li>
+          <time datetime="2026-09-04T19:30">19:30</time>
+          <span class="schedule-what">Cake</span>
+        </li>
+      </ul>
+    </section>
+
+    <section class="card reveal dress-code-section" aria-labelledby="dress-heading">
+      <h2 id="dress-heading">Dress code</h2>
+      <p>Garden-party attire in airy pastels and meadow tones feels right at home among the fields. The illustration below includes a soft violet dress as one lovely option. A light layer is lovely as the sun dips low.</p>
+      <figure class="dress-code-visual">
+        <img
+          src="images/dress-code.jpg"
+          width="1000"
+          height="666"
+          loading="lazy"
+          decoding="async"
+          alt="Dress code watercolor guide: powder blue, peach, cream, sage, and butter yellow palette, with one woman in a soft violet dress as an outfit example."
+        />
+      </figure>
+    </section>
+
+    <section class="card reveal">
+      <h2>Gifts</h2>
+      <p>Your presence is our greatest gift. Should you wish to honor us further, a small contribution toward our honeymoon would be warmly appreciated.</p>
+    </section>
+
+    <footer class="reveal">With love — E &amp; J</footer>
+  </div>
+
+  <script>
+    (function () {
+      var body = document.body;
+      var weddingIso = body.getAttribute("data-wedding-date");
+      var wedding = weddingIso ? new Date(weddingIso) : null;
+
+      /* Countdown */
+      var elDays = document.getElementById("cd-days");
+      var elHours = document.getElementById("cd-hours");
+      var elMins = document.getElementById("cd-mins");
+      var elSecs = document.getElementById("cd-secs");
+
+      function pad(n) {
+        return n < 10 ? "0" + n : String(n);
+      }
+
+      function tick() {
+        if (!wedding || isNaN(wedding.getTime())) return;
+        var now = new Date();
+        var diff = wedding.getTime() - now.getTime();
+        if (diff <= 0) {
+          elDays.textContent = "0";
+          elHours.textContent = "0";
+          elMins.textContent = "0";
+          elSecs.textContent = "0";
+          return;
+        }
+        var s = Math.floor(diff / 1000);
+        var days = Math.floor(s / 86400);
+        s -= days * 86400;
+        var hours = Math.floor(s / 3600);
+        s -= hours * 3600;
+        var mins = Math.floor(s / 60);
+        var secs = s - mins * 60;
+        elDays.textContent = String(days);
+        elHours.textContent = pad(hours);
+        elMins.textContent = pad(mins);
+        elSecs.textContent = pad(secs);
+      }
+
+      tick();
+      setInterval(tick, 1000);
+
+      /* RSVP mailto — edit email */
+      var rsvpEmail = "hello@example.com";
+      var rsvp = document.getElementById("rsvpBtn");
+      var subject = encodeURIComponent("Wedding RSVP — Emma & James");
+      var bodyText = encodeURIComponent("Dear Emma and James,\n\nWe are delighted to respond:\n\nNames attending:\nDietary notes:\n\nWith love");
+      rsvp.href = "mailto:" + rsvpEmail + "?subject=" + subject + "&body=" + bodyText;
+
+      /* Floating petals */
+      var petalRoot = document.getElementById("petals");
+      var petalGradients = [
+        "linear-gradient(135deg,#fefefe 0%,#f2e4a9 100%)",
+        "linear-gradient(135deg,#e8c547 0%,#f8efc4 100%)",
+        "linear-gradient(135deg,#a8bdd9 0%,#eef3fa 100%)",
+        "linear-gradient(135deg,#d4c4e0 0%,#faf7ff 100%)",
+        "linear-gradient(135deg,#e8a090 0%,#fce8e2 100%)",
+        "linear-gradient(135deg,#dff0e4 0%,#ffffff 100%)",
+      ];
+      var petalCount = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 24;
+      for (var i = 0; i < petalCount; i++) {
+        var p = document.createElement("div");
+        p.className = "petal";
+        var w = 5 + Math.random() * 11;
+        var round = Math.random() < 0.38;
+        p.style.left = Math.random() * 100 + "%";
+        p.style.animationDuration = 11 + Math.random() * 16 + "s";
+        p.style.animationDelay = Math.random() * 10 + "s";
+        p.style.width = w + "px";
+        p.style.height = (round ? w * 0.95 : w * 1.35) + "px";
+        p.style.borderRadius = round ? "50%" : "50% 50% 50% 0";
+        p.style.background = petalGradients[Math.floor(Math.random() * petalGradients.length)];
+        p.style.opacity = String(0.35 + Math.random() * 0.35);
+        petalRoot.appendChild(p);
+      }
+
+      /* Scroll reveal */
+      var revealEls = document.querySelectorAll(".reveal, .reveal-stagger");
+      if ("IntersectionObserver" in window) {
+        var io = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+              }
+            });
+          },
+          { root: null, threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+        );
+        revealEls.forEach(function (el) {
+          io.observe(el);
+        });
+      } else {
+        revealEls.forEach(function (el) {
+          el.classList.add("is-visible");
+        });
+      }
+
+      /* Soft cursor glow — skip touch devices */
+      var glow = document.getElementById("cursorGlow");
+      var finePointer = window.matchMedia("(pointer: fine)").matches;
+      if (finePointer && glow) {
+        var gx = 0;
+        var gy = 0;
+        var tx = 0;
+        var ty = 0;
+        var pending = false;
+        function smooth() {
+          gx += (tx - gx) * 0.12;
+          gy += (ty - gy) * 0.12;
+          glow.style.left = gx + "px";
+          glow.style.top = gy + "px";
+          if (Math.abs(tx - gx) > 0.8 || Math.abs(ty - gy) > 0.8) {
+            requestAnimationFrame(smooth);
+          } else {
+            pending = false;
+          }
+        }
+        document.addEventListener(
+          "mousemove",
+          function (e) {
+            tx = e.clientX;
+            ty = e.clientY;
+            if (!pending) {
+              pending = true;
+              requestAnimationFrame(smooth);
+            }
+          },
+          { passive: true }
+        );
+      } else if (glow) {
+        glow.style.display = "none";
+      }
+    })();
+  </script>
+</body>
+</html>
