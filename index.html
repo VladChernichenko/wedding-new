@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vlad & Liza</title>
+  <title>Vlad &amp; Liza — Wedding</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;500&display=swap" rel="stylesheet" />
@@ -36,20 +36,34 @@
     }
 
     html {
-      scroll-behavior: smooth;
-      overflow-x: hidden;
       max-width: 100%;
+      /* Avoid overflow-x on both html and body — iOS Safari can break vertical momentum scroll */
+      overflow-x: hidden;
+    }
+
+    @supports (overflow: clip) {
+      html {
+        overflow-x: clip;
+      }
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      html {
+        scroll-behavior: smooth;
+      }
     }
 
     body {
       margin: 0;
       min-height: 100vh;
+      min-height: 100dvh;
       font-family: var(--font-ui);
       font-weight: 300;
       color: var(--ink);
       background: linear-gradient(180deg, var(--sky-tint) 0%, var(--cream) 38%, var(--cream-deep) 100%);
-      overflow-x: hidden;
       max-width: 100%;
+      -webkit-text-size-adjust: 100%;
+      touch-action: pan-y pinch-zoom;
     }
 
     /* Watercolor wildflower field (similar to dress-code art) */
@@ -59,6 +73,7 @@
       z-index: 0;
       pointer-events: none;
       overflow: hidden;
+      transform: translateZ(0);
       background-image: url(images/wildflower-bg.jpg);
       background-repeat: no-repeat;
       background-position: center bottom;
@@ -87,17 +102,19 @@
       pointer-events: none;
       z-index: 0;
       overflow: hidden;
+      transform: translateZ(0);
       background:
         radial-gradient(ellipse 90% 55% at 15% 10%, rgba(232, 197, 71, 0.18), transparent 52%),
         radial-gradient(ellipse 70% 50% at 85% 15%, rgba(143, 167, 201, 0.2), transparent 48%),
         radial-gradient(ellipse 100% 70% at 50% 100%, rgba(90, 122, 98, 0.05), transparent 55%),
         linear-gradient(180deg, rgba(253, 251, 247, 0.4), transparent 60%);
-      animation: aurora-shift 22s ease-in-out infinite alternate;
+      /* Opacity-only: animating filter on a full-screen layer repaints the whole view and stalls scroll */
+      animation: aurora-shift 24s ease-in-out infinite alternate;
     }
 
     @keyframes aurora-shift {
-      0% { filter: hue-rotate(-6deg) brightness(1); }
-      100% { filter: hue-rotate(10deg) brightness(1.03); }
+      from { opacity: 0.88; }
+      to { opacity: 1; }
     }
 
     /* Floating field petals & petals */
@@ -138,6 +155,7 @@
       max-width: 720px;
       margin: 0 auto;
       padding: clamp(1.5rem, 4vw, 3rem);
+      overflow-x: hidden;
     }
 
     header.hero {
@@ -209,20 +227,21 @@
 
     .countdown {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 0.75rem;
       margin: 2.5rem auto 0;
-      max-width: 380px;
+      max-width: 100%;
+      width: min(380px, 100%);
       opacity: 0;
       animation: fade-up 1s var(--ease-out) 0.95s forwards;
     }
 
     .countdown .unit {
-      background: rgba(255, 255, 255, 0.75);
+      min-width: 0;
+      background: rgba(255, 255, 255, 0.9);
       border: 1px solid rgba(90, 122, 98, 0.2);
       border-radius: 12px;
       padding: 0.85rem 0.5rem;
-      backdrop-filter: blur(10px);
       box-shadow: 0 6px 20px rgba(60, 80, 65, 0.06);
     }
 
@@ -343,8 +362,33 @@
       color: #7a9eb8;
     }
 
-    section.card.dress-code-section > p {
+    section.card.dress-code-section > p,
+    section.card.dress-code-section .dress-block {
       color: rgba(55, 72, 78, 0.62);
+    }
+
+    section.card.dress-code-section .dress-code-sub {
+      font-family: var(--font-display);
+      font-size: 1.08rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #7a9eb8;
+      margin: 1.35rem 0 0.45rem;
+    }
+
+    section.card.dress-code-section .dress-code-sub:first-of-type {
+      margin-top: 0.35rem;
+    }
+
+    section.card.dress-code-section .dress-block {
+      margin: 0 0 0.15rem;
+      line-height: 1.75;
+      font-size: 0.98rem;
+    }
+
+    section.card.dress-code-section .dress-block:last-of-type {
+      margin-bottom: 0;
     }
 
     .dress-code-visual {
@@ -463,6 +507,13 @@
       opacity: 1;
     }
 
+    @media (pointer: coarse) {
+      .aurora {
+        animation: none;
+        opacity: 0.94;
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         animation-duration: 0.01ms !important;
@@ -470,6 +521,7 @@
         transition-duration: 0.01ms !important;
       }
       .petals { display: none; }
+      .aurora { animation: none; opacity: 1; }
     }
   </style>
 </head>
@@ -481,9 +533,11 @@
 
   <div class="wrap">
     <header class="hero">
-      <p class="eyebrow">Together with their friends</p>
+      <p class="eyebrow">Together with their families</p>
       <h1 class="names">
-        Vlad & Liza
+        Vlad
+        <span class="ampersand">&amp;</span>
+        Liza
       </h1>
       <p class="tagline">Invite you to celebrate their marriage</p>
       <div class="countdown" id="countdown" aria-live="polite">
@@ -511,7 +565,7 @@
         </div>
       </div>
       <div class="actions">
-        <a class="btn btn-primary" id="rsvpBtn" href="#">RSVP</a>
+        <a class="btn btn-primary" id="rsvpBtn" href="https://docs.google.com/forms/d/e/1FAIpQLSec3Fc4robKcrONM6xBYip4eTtXZ7nRWUQoW4Dh0wLg1r6GKw/viewform?usp=preview" target="_blank" rel="noopener noreferrer">RSVP</a>
         <a class="btn btn-ghost" href="https://maps.app.goo.gl/Hc9iQ9e4MYyxzpcZ8" target="_blank" rel="noopener">Directions</a>
       </div>
     </section>
@@ -536,15 +590,22 @@
 
     <section class="card reveal dress-code-section" aria-labelledby="dress-heading">
       <h2 id="dress-heading">Dress code</h2>
-      <p>Garden-party attire in airy pastels and meadow tones feels right at home among the fields. The illustration below includes a soft violet dress as one lovely option. A light layer is lovely as the sun dips low.</p>
+      <h3 class="dress-code-sub">For women</h3>
+      <p class="dress-block">
+        Midi or maxi length dresses, skirts or trouser suits are preferred. Opt for soft pastel colours, satin fabrics, floral prints and textured details. Please avoid white, black and red.
+      </p>
+      <h3 class="dress-code-sub">For men</h3>
+      <p class="dress-block">
+        Suits are recommended. Light colours (beige, light grey or blue) and linen are preferred. A black suit is permitted.
+      </p>
       <figure class="dress-code-visual">
         <img
-          src="images/dress-code.jpg"
+          src="images/dress-code.jpg?v=2"
           width="1000"
           height="666"
           loading="lazy"
           decoding="async"
-          alt="Dress code watercolor guide: powder blue, peach, cream, sage, and butter yellow palette, with one woman in a soft violet dress as an outfit example."
+          alt="Dress code guide in watercolor: autumnal palette swatches and three couples; men wear light beige, light grey, and powder blue suits as examples of permitted light suit colours."
         />
       </figure>
     </section>
@@ -600,14 +661,7 @@
       tick();
       setInterval(tick, 1000);
 
-      /* RSVP mailto — edit email */
-      var rsvpEmail = "hello@example.com";
-      var rsvp = document.getElementById("rsvpBtn");
-      var subject = encodeURIComponent("Wedding RSVP — Vlad & Liza");
-      var bodyText = encodeURIComponent("Dear Vlad and Liza,\n\nWe are delighted to respond:\n\nNames attending:\nDietary notes:\n\nWith love");
-      rsvp.href = "mailto:" + rsvpEmail + "?subject=" + subject + "&body=" + bodyText;
-
-      /* Floating petals */
+      /* Floating petals — defer so first scroll/input is not competing with layout */
       var petalRoot = document.getElementById("petals");
       var petalGradients = [
         "linear-gradient(135deg,#fefefe 0%,#f2e4a9 100%)",
@@ -617,21 +671,29 @@
         "linear-gradient(135deg,#e8a090 0%,#fce8e2 100%)",
         "linear-gradient(135deg,#dff0e4 0%,#ffffff 100%)",
       ];
-      var petalCount = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 24;
-      for (var i = 0; i < petalCount; i++) {
-        var p = document.createElement("div");
-        p.className = "petal";
-        var w = 5 + Math.random() * 11;
-        var round = Math.random() < 0.38;
-        p.style.left = Math.random() * 100 + "%";
-        p.style.animationDuration = 11 + Math.random() * 16 + "s";
-        p.style.animationDelay = Math.random() * 10 + "s";
-        p.style.width = w + "px";
-        p.style.height = (round ? w * 0.95 : w * 1.35) + "px";
-        p.style.borderRadius = round ? "50%" : "50% 50% 50% 0";
-        p.style.background = petalGradients[Math.floor(Math.random() * petalGradients.length)];
-        p.style.opacity = String(0.35 + Math.random() * 0.35);
-        petalRoot.appendChild(p);
+      function buildPetals() {
+        if (!petalRoot) return;
+        var petalCount = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 16;
+        for (var i = 0; i < petalCount; i++) {
+          var p = document.createElement("div");
+          p.className = "petal";
+          var w = 5 + Math.random() * 11;
+          var round = Math.random() < 0.38;
+          p.style.left = Math.random() * 100 + "%";
+          p.style.animationDuration = 11 + Math.random() * 16 + "s";
+          p.style.animationDelay = Math.random() * 10 + "s";
+          p.style.width = w + "px";
+          p.style.height = (round ? w * 0.95 : w * 1.35) + "px";
+          p.style.borderRadius = round ? "50%" : "50% 50% 50% 0";
+          p.style.background = petalGradients[Math.floor(Math.random() * petalGradients.length)];
+          p.style.opacity = String(0.35 + Math.random() * 0.35);
+          petalRoot.appendChild(p);
+        }
+      }
+      if ("requestIdleCallback" in window) {
+        requestIdleCallback(buildPetals, { timeout: 1800 });
+      } else {
+        setTimeout(buildPetals, 0);
       }
 
       /* Scroll reveal */
